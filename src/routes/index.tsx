@@ -4,6 +4,8 @@ import { useState } from "react";
 import { JsonLd } from "@/components/json-ld";
 import { PartCard } from "@/components/part-card";
 import { categories, parts, vehicles } from "@/lib/catalog";
+import { garages } from "@/lib/market";
+import { towns } from "@/lib/nepal";
 import { abs, SITE } from "@/lib/site";
 
 export const Route = createFileRoute("/")({
@@ -146,6 +148,28 @@ function Home() {
         ))}
       </section>
 
+      <section className="mx-auto max-w-6xl px-4 pb-4">
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="font-display text-4xl tracking-wide">Where the vehicle sits</h2>
+          <Link to="/nepal" className="text-sm text-copper">
+            Every lane
+          </Link>
+        </div>
+        <p className="mt-2 max-w-2xl text-sm text-muted">
+          Same day is the Valley. Next day is a spoke. Two days is the far highway. The hills are quoted. The promise is the product.
+        </p>
+        <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {towns.slice(0, 8).map((t) => (
+            <li key={t.slug}>
+              <Link to="/nepal/$slug" params={{ slug: t.slug }} className="block rounded-2xl border border-line bg-surface p-4 hover:border-copper">
+                <span className="font-display text-2xl tracking-wide">{t.name}</span>
+                <span className="mt-1 block text-sm text-muted">{t.eta}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section className="mx-auto max-w-6xl px-4 py-16">
         <div className="flex items-end justify-between gap-4">
           <h2 className="font-display text-4xl tracking-wide">Shop by system</h2>
@@ -198,6 +222,28 @@ function Home() {
                   <span className="font-display text-2xl tracking-wide">{v.name}</span>
                 </span>
                 <ArrowRight className="size-4 text-copper" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pb-4">
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="font-display text-4xl tracking-wide">BAATO Garage</h2>
+          <Link to="/garages" className="text-sm text-copper">
+            All bays
+          </Link>
+        </div>
+        <p className="mt-2 max-w-2xl text-sm text-muted">
+          Branded workshops with one labour card. Book the job on WhatsApp or by phone. Parts still come from a named vendor.
+        </p>
+        <ul className="mt-6 grid gap-3 sm:grid-cols-3">
+          {garages.map((g) => (
+            <li key={g.slug}>
+              <Link to="/garages/$slug" params={{ slug: g.slug }} className="block rounded-2xl border border-line bg-surface p-4 hover:border-copper">
+                <span className="text-xs uppercase tracking-[0.16em] text-muted">{g.city}</span>
+                <span className="mt-1 block font-display text-2xl tracking-wide">{g.name}</span>
               </Link>
             </li>
           ))}

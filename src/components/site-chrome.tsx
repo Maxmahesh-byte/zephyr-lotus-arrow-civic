@@ -34,8 +34,14 @@ export function SiteHeader() {
               {c.name.split(" ")[0]}
             </Link>
           ))}
-          <Link to="/faq" className="hover:text-fg">
-            FAQ
+          <Link to="/garages" className="hover:text-fg">
+            Garages
+          </Link>
+          <Link to="/sell" className="hover:text-fg">
+            Sell
+          </Link>
+          <Link to="/nepal" className="hover:text-fg">
+            Nepal
           </Link>
         </nav>
         <form onSubmit={submit} className="ml-auto hidden min-w-0 flex-1 max-w-xs md:block">
@@ -87,8 +93,14 @@ export function SiteHeader() {
                 {c.name}
               </Link>
             ))}
-            <Link to="/about" onClick={() => setOpen(false)} className="py-2">
-              About
+            <Link to="/nepal" onClick={() => setOpen(false)} className="py-2">
+              All Nepal
+            </Link>
+            <Link to="/garages" onClick={() => setOpen(false)} className="py-2">
+              Garages
+            </Link>
+            <Link to="/sell" onClick={() => setOpen(false)} className="py-2">
+              Vendor desk
             </Link>
             <Link to="/faq" onClick={() => setOpen(false)} className="py-2">
               FAQ
@@ -118,8 +130,11 @@ export function SiteFooter() {
           <p className="mt-1">{SITE.email}</p>
         </div>
         <div className="flex flex-col gap-2 text-sm">
-          <Link to="/about" className="hover:text-copper">
-            Why BAATO
+          <Link to="/garages" className="hover:text-copper">
+            BAATO Garage
+          </Link>
+          <Link to="/sell" className="hover:text-copper">
+            Vendor desk
           </Link>
           <Link to="/faq" className="hover:text-copper">
             Fitment & delivery FAQ

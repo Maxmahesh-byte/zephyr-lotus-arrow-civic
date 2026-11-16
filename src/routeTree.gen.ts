@@ -14,7 +14,13 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as SellRouteImport } from './routes/sell'
 import { Route as CategorySlugRouteImport } from './routes/category/$slug'
+import { Route as GaragesIndexRouteImport } from './routes/garages/index'
+import { Route as GaragesSlugRouteImport } from './routes/garages/$slug'
+import { Route as GaragesJoinRouteImport } from './routes/garages/join'
+import { Route as NepalIndexRouteImport } from './routes/nepal/index'
+import { Route as NepalSlugRouteImport } from './routes/nepal/$slug'
 import { Route as PartsIndexRouteImport } from './routes/parts/index'
 import { Route as PartsSlugRouteImport } from './routes/parts/$slug'
 import { Route as VehiclesSlugRouteImport } from './routes/vehicles/$slug'
@@ -44,9 +50,39 @@ const FaqRoute = FaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SellRoute = SellRouteImport.update({
+  id: '/sell',
+  path: '/sell',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
   id: '/category/$slug',
   path: '/category/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GaragesIndexRoute = GaragesIndexRouteImport.update({
+  id: '/garages/',
+  path: '/garages/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GaragesSlugRoute = GaragesSlugRouteImport.update({
+  id: '/garages/$slug',
+  path: '/garages/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GaragesJoinRoute = GaragesJoinRouteImport.update({
+  id: '/garages/join',
+  path: '/garages/join',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NepalIndexRoute = NepalIndexRouteImport.update({
+  id: '/nepal/',
+  path: '/nepal/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NepalSlugRoute = NepalSlugRouteImport.update({
+  id: '/nepal/$slug',
+  path: '/nepal/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartsIndexRoute = PartsIndexRouteImport.update({
@@ -71,9 +107,15 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/sell': typeof SellRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/garages/$slug': typeof GaragesSlugRoute
+  '/garages/join': typeof GaragesJoinRoute
+  '/nepal/$slug': typeof NepalSlugRoute
   '/parts/$slug': typeof PartsSlugRoute
   '/vehicles/$slug': typeof VehiclesSlugRoute
+  '/garages/': typeof GaragesIndexRoute
+  '/nepal/': typeof NepalIndexRoute
   '/parts/': typeof PartsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -82,9 +124,15 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/sell': typeof SellRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/garages/$slug': typeof GaragesSlugRoute
+  '/garages/join': typeof GaragesJoinRoute
+  '/nepal/$slug': typeof NepalSlugRoute
   '/parts/$slug': typeof PartsSlugRoute
   '/vehicles/$slug': typeof VehiclesSlugRoute
+  '/garages': typeof GaragesIndexRoute
+  '/nepal': typeof NepalIndexRoute
   '/parts': typeof PartsIndexRoute
 }
 export interface FileRoutesById {
@@ -94,9 +142,15 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/sell': typeof SellRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/garages/$slug': typeof GaragesSlugRoute
+  '/garages/join': typeof GaragesJoinRoute
+  '/nepal/$slug': typeof NepalSlugRoute
   '/parts/$slug': typeof PartsSlugRoute
   '/vehicles/$slug': typeof VehiclesSlugRoute
+  '/garages/': typeof GaragesIndexRoute
+  '/nepal/': typeof NepalIndexRoute
   '/parts/': typeof PartsIndexRoute
 }
 export interface FileRouteTypes {
@@ -107,9 +161,15 @@ export interface FileRouteTypes {
     | '/cart'
     | '/contact'
     | '/faq'
+    | '/sell'
     | '/category/$slug'
+    | '/garages/$slug'
+    | '/garages/join'
+    | '/nepal/$slug'
     | '/parts/$slug'
     | '/vehicles/$slug'
+    | '/garages/'
+    | '/nepal/'
     | '/parts/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -118,9 +178,15 @@ export interface FileRouteTypes {
     | '/cart'
     | '/contact'
     | '/faq'
+    | '/sell'
     | '/category/$slug'
+    | '/garages/$slug'
+    | '/garages/join'
+    | '/nepal/$slug'
     | '/parts/$slug'
     | '/vehicles/$slug'
+    | '/garages'
+    | '/nepal'
     | '/parts'
   id:
     | '__root__'
@@ -129,9 +195,15 @@ export interface FileRouteTypes {
     | '/cart'
     | '/contact'
     | '/faq'
+    | '/sell'
     | '/category/$slug'
+    | '/garages/$slug'
+    | '/garages/join'
+    | '/nepal/$slug'
     | '/parts/$slug'
     | '/vehicles/$slug'
+    | '/garages/'
+    | '/nepal/'
     | '/parts/'
   fileRoutesById: FileRoutesById
 }
@@ -141,9 +213,15 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
+  SellRoute: typeof SellRoute
   CategorySlugRoute: typeof CategorySlugRoute
+  GaragesSlugRoute: typeof GaragesSlugRoute
+  GaragesJoinRoute: typeof GaragesJoinRoute
+  NepalSlugRoute: typeof NepalSlugRoute
   PartsSlugRoute: typeof PartsSlugRoute
   VehiclesSlugRoute: typeof VehiclesSlugRoute
+  GaragesIndexRoute: typeof GaragesIndexRoute
+  NepalIndexRoute: typeof NepalIndexRoute
   PartsIndexRoute: typeof PartsIndexRoute
 }
 
@@ -184,11 +262,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sell': {
+      id: '/sell'
+      path: '/sell'
+      fullPath: '/sell'
+      preLoaderRoute: typeof SellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/category/$slug': {
       id: '/category/$slug'
       path: '/category/$slug'
       fullPath: '/category/$slug'
       preLoaderRoute: typeof CategorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/garages/': {
+      id: '/garages/'
+      path: '/garages'
+      fullPath: '/garages/'
+      preLoaderRoute: typeof GaragesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/garages/$slug': {
+      id: '/garages/$slug'
+      path: '/garages/$slug'
+      fullPath: '/garages/$slug'
+      preLoaderRoute: typeof GaragesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/garages/join': {
+      id: '/garages/join'
+      path: '/garages/join'
+      fullPath: '/garages/join'
+      preLoaderRoute: typeof GaragesJoinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nepal/': {
+      id: '/nepal/'
+      path: '/nepal'
+      fullPath: '/nepal/'
+      preLoaderRoute: typeof NepalIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nepal/$slug': {
+      id: '/nepal/$slug'
+      path: '/nepal/$slug'
+      fullPath: '/nepal/$slug'
+      preLoaderRoute: typeof NepalSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/parts/': {
@@ -221,9 +341,15 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
+  SellRoute: SellRoute,
   CategorySlugRoute: CategorySlugRoute,
+  GaragesSlugRoute: GaragesSlugRoute,
+  GaragesJoinRoute: GaragesJoinRoute,
+  NepalSlugRoute: NepalSlugRoute,
   PartsSlugRoute: PartsSlugRoute,
   VehiclesSlugRoute: VehiclesSlugRoute,
+  GaragesIndexRoute: GaragesIndexRoute,
+  NepalIndexRoute: NepalIndexRoute,
   PartsIndexRoute: PartsIndexRoute,
 }
 export const routeTree = rootRouteImport

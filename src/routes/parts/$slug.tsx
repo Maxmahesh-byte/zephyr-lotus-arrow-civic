@@ -3,6 +3,9 @@ import { JsonLd } from "@/components/json-ld";
 import { PartCard } from "@/components/part-card";
 import { partBySlug, parts, vehicleName } from "@/lib/catalog";
 import { useCart } from "@/lib/cart";
+import { liveOffers, useMarket, vendorById } from "@/lib/market";
+import { townBySlug, usePlace } from "@/lib/nepal";
+import { telHref, waHref } from "@/lib/phone";
 import { abs, SITE } from "@/lib/site";
 import { npr } from "@/lib/utils";
 import { useState } from "react";
@@ -40,6 +43,9 @@ function Product() {
   const { part } = Route.useLoaderData();
   const add = useCart((s) => s.add);
   const [added, setAdded] = useState(false);
+  const offers = useMarket((s) => s.offers);
+  const listed = liveOffers(offers, part.slug);
+  const place = townBySlug(usePlace((s) => s.slug)) ?? townBySlug("kathmandu");
   const related = parts.filter((p) => p.slug !== part.slug && p.category === part.category).slice(0, 3);
 
   return (
@@ -101,7 +107,7 @@ function Product() {
           <p className="mt-3 text-muted">{part.lead}</p>
           <p className="mt-4 font-display text-4xl">{npr(part.price)}</p>
           <p className="mt-1 text-sm text-muted">
-            SKU {part.sku} · {part.stock} in the Valley cage · {part.eta}
+            SKU {part.sku} · {part.stock} in the Valley cage · {place ? `${place.eta} to ${place.name}` : part.eta}
           </p>
           <button
             type="button"
@@ -113,6 +119,48 @@ function Product() {
           >
             {added ? "Added — add another" : "Add to dispatch list"}
           </button>
+          <h2 className="mt-8 font-display text-2xl tracking-wide">Who has it</h2>
+          {listed.length === 0 ? (
+            <p className="mt-2 text-sm text-muted">No vendor has this checked in. The BAATO desk price above is the fallback.</p>
+          ) : (
+            <ul className="mt-3 divide-y divide-line border-y border-line">
+              {listed.map((o) => {
+                const vendor = vendorById(o.vendorId);
+                if (!vendor) return null;
+                const text = `BAATO: I want ${part.name} (${part.sku}) at ${npr(o.price)} from ${vendor.name}.`;
+                return (
+                  <li key={o.vendorId} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="font-medium">{vendor.name}</p>
+                      <p className="text-sm text-muted">
+                        {vendor.area}, {vendor.city} · {npr(o.price)}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        className="h-11 rounded-full bg-copper px-4 text-sm font-medium text-bg"
+                        onClick={() => add(part.slug, 1, vendor.id)}
+                      >
+                        Buy
+                      </button>
+                      <a
+                        href={waHref(vendor.phone, text)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex h-11 items-center rounded-full border border-line px-4 text-sm"
+                      >
+                        WhatsApp
+                      </a>
+                      <a href={telHref(vendor.phone)} className="inline-flex h-11 items-center rounded-full border border-line px-4 text-sm">
+                        Call
+                      </a>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
           <h2 className="mt-8 font-display text-2xl tracking-wide">Fits</h2>
           <ul className="mt-2 flex flex-wrap gap-2">
             {part.vehicles.map((v) => (

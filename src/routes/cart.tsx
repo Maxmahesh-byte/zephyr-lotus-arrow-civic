@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { partBySlug } from "@/lib/catalog";
 import { useCart } from "@/lib/cart";
+import { useMarket, vendorById } from "@/lib/market";
 import { abs } from "@/lib/site";
 import { npr } from "@/lib/utils";
 
@@ -24,14 +25,18 @@ function CartPage() {
   const clear = useCart((s) => s.clear);
   const [placed, setPlaced] = useState(false);
 
+  const offers = useMarket((s) => s.offers);
   const rows = lines
     .map((l) => {
       const part = partBySlug(l.slug);
-      return part ? { part, qty: l.qty } : null;
+      if (!part) return null;
+      const offer = offers.find((o) => o.vendorId === l.vendorId && o.slug === l.slug);
+      const price = offer?.price ?? part.price;
+      return { part, qty: l.qty, vendorId: l.vendorId, price };
     })
     .filter((r): r is NonNullable<typeof r> => !!r);
 
-  const total = rows.reduce((n, r) => n + r.part.price * r.qty, 0);
+  const total = rows.reduce((n, r) => n + r.price * r.qty, 0);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">
@@ -57,19 +62,22 @@ function CartPage() {
       ) : (
         <>
           <ul className="mt-8 divide-y divide-line border-y border-line">
-            {rows.map(({ part, qty }) => (
-              <li key={part.slug} className="flex gap-4 py-4">
+            {rows.map(({ part, qty, vendorId, price }) => (
+              <li key={`${part.slug}-${vendorId ?? "desk"}`} className="flex gap-4 py-4">
                 <img src={part.image} alt="" className="size-20 rounded-xl object-cover" />
                 <div className="min-w-0 flex-1">
                   <Link to="/parts/$slug" params={{ slug: part.slug }} className="font-medium hover:text-copper">
                     {part.name}
                   </Link>
-                  <p className="text-sm text-muted">{npr(part.price)}</p>
+                  <p className="text-sm text-muted">
+                    {npr(price)}
+                    {vendorId ? ` · ${vendorById(vendorId)?.name ?? "Vendor"}` : " · BAATO desk"}
+                  </p>
                   <div className="mt-2 flex items-center gap-2">
                     <button
                       type="button"
                       className="size-11 rounded-full border border-line"
-                      onClick={() => setQty(part.slug, qty - 1)}
+                      onClick={() => setQty(part.slug, qty - 1, vendorId)}
                       aria-label="Decrease quantity"
                     >
                       −
@@ -78,17 +86,17 @@ function CartPage() {
                     <button
                       type="button"
                       className="size-11 rounded-full border border-line"
-                      onClick={() => setQty(part.slug, qty + 1)}
+                      onClick={() => setQty(part.slug, qty + 1, vendorId)}
                       aria-label="Increase quantity"
                     >
                       +
                     </button>
-                    <button type="button" className="ml-2 text-sm text-muted" onClick={() => remove(part.slug)}>
+                    <button type="button" className="ml-2 text-sm text-muted" onClick={() => remove(part.slug, vendorId)}>
                       Remove
                     </button>
                   </div>
                 </div>
-                <p className="tabular-nums">{npr(part.price * qty)}</p>
+                <p className="tabular-nums">{npr(price * qty)}</p>
               </li>
             ))}
           </ul>
